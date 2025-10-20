@@ -1,0 +1,98 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: pt_BR.UTF-8
+  keyboard:
+    layout: br
+  identity:
+    realname: Italo Cantalupo Lima
+    hostname: cantalupo-Orange-Pi-5
+    username: cantalupo
+    password: '$y$j9T$7U8nv8Rcw1iPGpDfXo4VS.$Vw0wlJIpVP6qUohJetOUWT4EA54AfjV7Y8.Z6ACOmm8'
+  storage:
+    version: 1
+    disks:
+      - path: /dev/nvme0n1
+        ptable: gpt
+        match:
+          serial: 002F7024-0953-168
+        partitions:
+          - size: 1G
+            format: fat32
+            mount: /boot/efi
+            flag: boot, esp
+          - format: btrfs
+            mount: /
+  timezone: America/Recife
+  codecs:
+    install: true
+  drivers:
+    install: true
+  packages:
+    - aria2
+    - bmon
+    - btop
+    - build-essential
+    - ca-certificates
+    - cmake
+    - cpufrequtils
+    - curl
+    - dialog
+    - docker.io
+    - f2fs-tools
+    - fastfetch
+    - flatpak
+    - font-manager
+    - gdu
+    - git
+    - glances
+    - gparted
+    - htop
+    - iftop
+    - iotop
+    - iotop-c
+    - iperf3
+    - iputils-ping
+    - libavif16
+    - libfuse2
+    - libgstreamer-plugins-bad1.0-0
+    - libportaudio2
+    - maven
+    - mesa-utils
+    - mono-runtime
+    - net-tools
+    - nethogs
+    - nfs-common
+    - openjdk-25-jdk
+    - openjdk-8-jdk
+    - pandoc
+    - pv
+    - python3
+    - python3-pip
+    - python3-venv
+    - ripgrep
+    - smartmontools
+    - sshfs
+    - sshpass
+    - telnet
+    - tmux
+    - tree
+    - vnstat
+    - vulkan-tools
+    - webp
+    - whois
+    - wl-clipboard
+    - xclip
+    - xfsprogs
+  snaps:
+    - name: telegram-desktop
+    - name: node
+      classic: true
+  debconf-selections: |
+    iperf3 iperf3/start-daemon boolean false
+  late-commands:
+    - curtin in-target -- adduser cantalupo docker
+    - curtin in-target -- flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    - curtin in-target -- flatpak install flathub md.obsidian.Obsidian -y
+  updates: all
+  shutdown: reboot
